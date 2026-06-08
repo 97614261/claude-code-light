@@ -1,0 +1,184 @@
+html, body, #root {
+  background: transparent !important;
+  margin: 0; padding: 0; height: 100%; overflow: hidden;
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif;
+}
+
+/* ====== keyframes ====== */
+@keyframes breathe { 0%,100% { opacity: 1 } 50% { opacity: 0.35 } }
+@keyframes pulse   { 0%,100% { opacity: 1; transform: scale(1) } 50% { opacity: 0.2; transform: scale(0.93) } }
+@keyframes ring    { 0% { box-shadow: 0 0 0 0 var(--c); opacity: 1 } 100% { box-shadow: 0 0 0 16px transparent; opacity: 0 } }
+
+/* ====== root layout ====== */
+#root {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: flex-start;
+  padding-top: 8px;
+}
+
+/* ====== housing ====== */
+.housing {
+  position: relative;
+  display: flex; flex-direction: column; align-items: center;
+  border-radius: 18px;
+  width: 64px;
+  padding: 12px 0 16px;
+  background: linear-gradient(180deg, #3a3a3c 0%, #2c2c2e 40%, #232325 100%);
+  box-shadow: 0 2px 0 rgba(255,255,255,0.06) inset, 0 -1px 0 rgba(0,0,0,0.5) inset;
+  border: 1px solid rgba(255,255,255,0.07);
+  box-sizing: border-box;
+}
+.housing.single { padding: 12px 0; }
+body.light .housing {
+  background: linear-gradient(180deg, #fff 0%, #f5f5f7 100%);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.9) inset, 0 -1px 0 rgba(0,0,0,0.06) inset;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+
+/* 左侧立式 "claude" 文字（逆时针 90°，自下而上） */
+.housing::after {
+  content: "CLAUDE";
+  position: absolute;
+  left: 10px;
+  bottom: 112px;
+  transform: rotate(-90deg);
+  transform-origin: left bottom;
+  font-size: 7px;
+  letter-spacing: 1.5px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.4);
+  pointer-events: none;
+  white-space: nowrap;
+  user-select: none;
+}
+body.light .housing::after { color: rgba(0,0,0,0.4); }
+/* 单灯模式 housing 只有 ~60px 高，bottom: 115px 会把文字推出窗口 */
+.housing.single::after { bottom: 16px; }
+.bulbs { position: relative; z-index: 1; }
+
+.bulbs { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+
+/* ====== bulb ====== */
+.bulb {
+  position: relative; display: flex; align-items: center; justify-content: center;
+}
+.bulb[data-light="red"]    { --c: #FF3B30; --g: rgba(255,59,48,0.55);  --ig: rgba(255,100,80,0.3);  --dim: #2a1110; }
+.bulb[data-light="yellow"] { --c: #FF9F0A; --g: rgba(255,159,10,0.55); --ig: rgba(255,180,60,0.3);  --dim: #271d08; }
+.bulb[data-light="green"]  { --c: #30D158; --g: rgba(48,209,88,0.55);  --ig: rgba(80,220,110,0.3);  --dim: #0b2818; }
+body.light .bulb[data-light="red"]    { --dim: #fde8e7; }
+body.light .bulb[data-light="yellow"] { --dim: #fef3dc; }
+body.light .bulb[data-light="green"]  { --dim: #d8f5e4; }
+
+.bulb-outer {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.3s ease;
+  background: #1a1a1b;
+  box-shadow: inset 0 1px 6px rgba(0,0,0,0.7);
+  border: 1px solid rgba(255,255,255,0.04);
+}
+body.light .bulb-outer {
+  background: #ebebed;
+  box-shadow: inset 0 1px 6px rgba(0,0,0,0.1);
+  border: 1px solid rgba(0,0,0,0.06);
+}
+.bulb.active .bulb-outer {
+  background: var(--dim);
+  box-shadow: inset 0 1px 6px rgba(0,0,0,0.6), 0 0 14px var(--g), 0 0 28px var(--g);
+  border-color: color-mix(in srgb, var(--c) 19%, transparent);
+}
+body.light .bulb.active .bulb-outer {
+  box-shadow: inset 0 1px 6px rgba(0,0,0,0.08), 0 0 8px var(--g);
+}
+
+.bulb-inner {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.4s ease;
+  background: radial-gradient(circle at 38% 36%,
+    color-mix(in srgb, var(--dim) 80%, transparent) 0%,
+    color-mix(in srgb, var(--dim) 53%, transparent) 100%);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
+}
+body.light .bulb-inner { box-shadow: inset 0 1px 2px rgba(0,0,0,0.12); }
+.bulb.active .bulb-inner {
+  background: radial-gradient(circle at 38% 36%,
+    var(--c) 0%,
+    color-mix(in srgb, var(--c) 87%, transparent) 40%,
+    color-mix(in srgb, var(--c) 53%, transparent) 100%);
+  box-shadow: 0 0 8px var(--g), 0 0 3px var(--ig), inset 0 1px 2px rgba(255,255,255,0.25);
+}
+body.light .bulb.active .bulb-inner {
+  box-shadow: 0 0 5px var(--g), inset 0 1px 2px rgba(255,255,255,0.4);
+}
+.bulb.breathe .bulb-inner { animation: breathe 2s ease-in-out infinite; }
+.bulb.blink   .bulb-inner { animation: pulse 0.55s ease-in-out infinite; }
+
+/* shine highlight on active non-red bulb (pseudo) */
+.bulb.active:not([data-light="red"]) .bulb-inner::after {
+  content: ""; width: 12px; height: 8px; border-radius: 50%;
+  background: rgba(255,255,255,0.35); margin-top: 8px; filter: blur(1.5px);
+}
+
+/* ring pulse outside the bulb (pseudo) */
+.bulb.blink[data-light="red"]::before,
+.bulb.blink[data-light="green"]::before {
+  content: ""; position: absolute; width: 36px; height: 36px; border-radius: 50%;
+  pointer-events: none;
+  --c: rgba(255,59,48,0.6);   /* red ring */
+  animation: ring 0.55s ease-out infinite;
+}
+.bulb.blink[data-light="green"]::before { --c: rgba(48,209,88,0.6); }
+
+/* dog overlay (light theme only, on red & green when active) */
+.bulb .dog {
+  position: absolute; width: 32px; height: 32px; object-fit: contain;
+  pointer-events: none; z-index: 10; display: none;
+}
+body.light .bulb.active[data-light="red"]   .dog { display: block; mix-blend-mode: screen; }
+body.light .bulb.active[data-light="green"] .dog { display: block; mix-blend-mode: multiply; }
+
+/* ====== gear (settings button) ====== */
+.gear {
+  position: absolute; bottom: 4px; right: 4px;
+  width: 16px; height: 16px; border-radius: 50%; border: none;
+  font-size: 9px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.5);
+}
+body.light .gear { background: rgba(0,0,0,0.08); color: rgba(0,0,0,0.35); }
+
+/* ====== settings panel ====== */
+.settings {
+  margin-top: 6px; border-radius: 12px; padding: 8px 10px;
+  width: 64px; box-sizing: border-box;
+  display: none; flex-direction: column; gap: 6px;
+  background: rgba(44,44,46,0.96);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+body.light .settings {
+  background: rgba(255,255,255,0.96);
+  border: 1px solid rgba(0,0,0,0.08);
+}
+.settings.open { display: flex; }
+
+.row { display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+.row .icon { font-size: 10px; color: rgba(255,255,255,0.7); }
+body.light .row .icon { color: rgba(0,0,0,0.6); }
+
+.toggle {
+  width: 28px; height: 14px; border-radius: 7px;
+  position: relative; transition: background 0.2s; cursor: pointer;
+  background: rgba(255,255,255,0.15);
+}
+body.light .toggle { background: rgba(0,0,0,0.12); }
+.toggle.on { background: #30D158; }
+.toggle .knob {
+  position: absolute; top: 2px; left: 2px;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: white; transition: left 0.2s;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+.toggle.on .knob { left: 14px; }

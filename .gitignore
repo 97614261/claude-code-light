@@ -1,0 +1,29 @@
+# ===== Build artifacts =====
+node_modules/
+dist/
+src-tauri/target/
+src-tauri/gen/
+
+# ===== Release binaries (use GitHub Releases instead) =====
+*.exe
+*.dmg
+*.app/
+release/
+
+# ===== OS junk =====
+.DS_Store
+Thumbs.db
+
+# ===== Editor =====
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# ===== Tauri =====
+src-tauri/WixTools/
+src-tauri/.tauri/
+
+# ===== Logs / locks (lock files OK for npm/cargo though) =====
+*.log

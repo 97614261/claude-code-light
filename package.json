@@ -1,0 +1,26 @@
+{
+  "name": "claude-code-light",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Claude Code 桌面状态指示灯，单 exe ~4.5 MB",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "dev:vite": "vite",
+    "dev": "tauri dev",
+    "build": "vite build",
+    "tauri": "tauri",
+    "bundle": "tauri build"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2",
+    "@tauri-apps/plugin-clipboard-manager": "^2",
+    "@tauri-apps/plugin-dialog": "^2",
+    "@tauri-apps/plugin-opener": "^2"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2",
+    "typescript": "^5.5.2",
+    "vite": "6.3.5"
+  }
+}

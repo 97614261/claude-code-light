@@ -1,0 +1,42 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "CC 红绿灯",
+  "version": "1.3.2",
+  "identifier": "com.cc.traffic-light",
+  "build": {
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:5173",
+    "beforeDevCommand": "npm run dev:vite",
+    "beforeBuildCommand": "npm run build"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "CC 红绿灯",
+        "width": 76,
+        "height": 168,
+        "decorations": false,
+        "transparent": true,
+        "alwaysOnTop": true,
+        "skipTaskbar": true,
+        "resizable": false,
+        "shadow": false,
+        "visibleOnAllWorkspaces": true,
+        "focus": false
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["nsis", "dmg"],
+    "icon": ["icons/icon.ico", "icons/icon.icns"],
+    "category": "Utility",
+    "copyright": "© 2025",
+    "shortDescription": "CC 红绿灯",
+    "longDescription": "Claude Code 红绿灯桌面提示器"
+  }
+}
